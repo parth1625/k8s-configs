@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-deployment
+  labels:
+    app: django-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-app
+  template:
+    metadata:
+      labels:
+        app: django-app
+    spec:
+      containers:
+      - name: web
+        image: parth10/django_ecs:v5
+        ports:
+        - containerPort: 8000
+        lifecycle:
+          postStart:
+            exec:
+              command: ["./script.sh"]
+        env:
+        - name: POSTGRES_USER
+          value: k8s
+        - name: POSTGRES_PASSWORD
+          value: redhat
+        - name: POSTGRES_HOST
+          value: postgres-service

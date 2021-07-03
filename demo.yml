@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-deploy
+  labels:
+    app: demo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-app
+  template:
+    metadata:
+      labels:
+        app: demo-app
+    spec:
+      containers:
+      - name: demo
+        image: parth10/django_ecs:v4
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh","-c","mkdir test"]
+        ports:
+        - containerPort: 8000

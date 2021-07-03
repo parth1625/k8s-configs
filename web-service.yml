@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: web-service
+spec:
+  selector:
+    app: django-app 
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8000
