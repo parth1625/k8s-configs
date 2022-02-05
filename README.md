@@ -66,3 +66,46 @@
     minikube ip
     minikube service <service-name>
     minikube service <service-name> --url
+
+## Horizontal Auto Scale in minikube:
+    minikube addons list
+    minikube addons enable metrics-server
+    kubectl get pod,svc -n kube-system
+    kubectl autoscale deployment <DEPLOYMENT_NAME> --cpu-percent=50 --min=1 --max=10
+    kubectl get hpa
+
+## Install Traefik Ingress Controller via Helm:
+    helm repo add traefik https://helm.traefik.io/traefik
+    helm repo update
+    kubectl create namespace traefik
+    helm install traefik traefik/traefik -n traefik
+    kubectl port-forward $(kubectl get pods --selector "app.kubernetes.io/name=traefik" --output=name) 9000:9000
+
+## Install Nginx Ingress COntroller via Helm:
+    helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
+    kubectl --namespace ingress-nginx get services -o wide -w ingress-nginx-controller
+    kubectl --namespace ingress-nginx get services
+
+## Configure cert manager for Nginx Ingress:
+    kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.1/cert-manager.yaml             (Kubernetes version 1.16+)
+
+    kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.1/cert-manager-legacy.yaml      (Kubernetes <1.16 version)
+
+## Kubernetes Nginx Ingress Controller LetsEncrypt:
+    kubectl apply -f letsencrypt-issuer.yml
+
+## Creating Nginx Ingress Let’s Encrypt TLS Certificate:
+    kubectl apply -f letsencrypt-cert.yml
+    kubectl get certificates nginxapp.fosstechnix.info
+    kubectl get secrets nginxapp.fosstechnix.info-tls
+
+## Point Nginx Ingress Let’s Encrypt Certificate in Nginx Ingress:
+    kubectl edit ingress nginx-ingress
+
+    ```
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    tls:
+    - hosts:
+        - nginxapp.fosstechnix.info
+        secretName: nginxapp.fosstechnix.info-tls
+    ```
