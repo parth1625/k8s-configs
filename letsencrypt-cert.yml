@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nginxapp.fosstechnix.info
+  namespace: default
+spec:
+  secretName: nginxapp.fosstechnix.info-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: nginxapp.fosstechnix.info
+  dnsNames:
+  - nginxapp.fosstechnix.info
