@@ -67,6 +67,31 @@
     minikube service <service-name>
     minikube service <service-name> --url
 
+## Install Helm:
+**Ubuntu**:
+    curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
+    sudo apt-get install apt-transport-https --yes
+    echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+    sudo apt-get update
+    sudo apt-get install helm
+
+**MacOS**:
+    brew install helm
+
+## Helm commands:
+    helm list
+    helm list --all-namespaces
+    helm ls
+    helm get manifest code-crow-client-prod
+    helm get manifest code-crow-server-prod
+    helm delete <deployment name> --namespace <namespace_name>
+
+## Cretea K8S secrets:
+    kubectl create secret generic <name> --from-literal=<key>='<value>'
+
+## Create Docker registry secret:
+    kubectl create secret docker-registry docker-reg --docker-server=https://index.docker.io/v1/  --docker-username=<DOCKER_USERNAME>  --docker-password=<DOCKER_PASSWORD>
+
 ## Horizontal Auto Scale in minikube:
     minikube addons list
     minikube addons enable metrics-server
@@ -96,8 +121,8 @@
 
 ## Creating Nginx Ingress Let’s Encrypt TLS Certificate:
     kubectl apply -f letsencrypt-cert.yml
-    kubectl get certificates nginxapp.fosstechnix.info
-    kubectl get secrets nginxapp.fosstechnix.info-tls
+    kubectl get certificates <CERTIFICATE_NAME>
+    kubectl get secrets <SECRET_NAME>
 
 ## Point Nginx Ingress Let’s Encrypt Certificate in Nginx Ingress:
     kubectl edit ingress nginx-ingress
@@ -107,5 +132,16 @@
     cert-manager.io/cluster-issuer: letsencrypt-prod
     tls:
     - hosts:
-        - nginxapp.fosstechnix.info
-        secretName: nginxapp.fosstechnix.info-tls
+        - <DOMAIN_NAME>
+        secretName: <SECRET_NAME>
+
+## AWS EKS Commands:
+    aws eks list-clusters
+    aws eks list-nodegroups --cluster-name <CLUSTER_NAME>
+    aws eks --region <REGION_NAME> update-kubeconfig --name stag-crow-k8s-cluster  --kubeconfig  /var/www/kubernetes/stag-crow-k8s-cluster.yml 
+    aws eks --region <REGION_NAME> update-kubeconfig --name <CLUSTER_NAME>  --kubeconfig <YAML_FILENAME>
+    kubectl get pods --kubeconfig <YAML_FILENAME>
+    aws eks update-kubeconfig --name <CLUSTER_NAME> --region <REGION_NAME>
+    kubectl config get-contexts
+    kubectl get namespace
+    kubectl delete ns <NAMEPSACE_NAME>
