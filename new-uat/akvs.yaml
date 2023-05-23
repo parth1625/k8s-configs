@@ -1,0 +1,19 @@
+name: akv2k8s
+
+controller:
+  # -- Name
+  name: controller
+  # -- Whether to install the controller
+  enabled: true
+
+  image:
+    # -- Image repository that contains the controller image
+    repository: spvest/azure-keyvault-controller
+    # -- Image tag
+    tag: latest
+    # -- Image pull policy for controller
+    pullPolicy: IfNotPresent
+
+securityContext:
+  allowPrivilegeEscalation: false
+  runAsUser: 65534

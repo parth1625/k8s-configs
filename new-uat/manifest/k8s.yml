@@ -1,0 +1,361 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: usermanagement
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: usermanagement
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+    type: RollingUpdate
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: usermanagement
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: usermanagement
+        image: uatvemscr.azurecr.io/usermanagement:latest
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+          limits:
+            cpu: 500m
+            memory: 1024Mi
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+        ports:
+        - containerPort: 8000
+        readinessProbe:  
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+       
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: usermanagement-uat
+  name: usermanagement-uat
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8000
+  selector:
+    app: usermanagement
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontendmanagement
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontendmanagement
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+    type: RollingUpdate
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: frontendmanagement
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: frontend
+        image: uatvemscr.azurecr.io/frontendmanagement:latest
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+          limits:
+            cpu: 500m
+            memory: 1024Mi
+        securityContext:
+          runAsNonRoot: true       
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+        ports:
+        - containerPort: 8000
+        readinessProbe:  
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+       
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: frontendmanagement-uat
+  name: frontendmanagement-uat
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8000
+  selector:
+    app: frontendmanagement
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventmanagement
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventmanagement
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+    type: RollingUpdate
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: eventmanagement
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: event
+        image: uatvemscr.azurecr.io/eventmanagement:latest
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+          limits:
+            cpu: 500m
+            memory: 1024Mi
+        securityContext:
+          runAsNonRoot: true       
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+        ports:
+        - containerPort: 8000
+        readinessProbe:  
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+       
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: eventmanagement-uat
+  name: eventmanagement-uat
+  # annotations:
+  #   traefik.ingress.kubernetes.io/affinity: "true"
+    # traefik.ingress.kubernetes.io/session-cookie-name: cookie
+  #     #traefik.ingress.kubernetes.io/session-cookie-name: cookie
+    # traefik.ingress.kubernetes.io/service.sticky.cookie.secure: "true"
+  #   traefik.ingress.kubernetes.io/load-balancer-method: drr
+    # traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
+  #   # traefik.ingress.kubernetes.io/service.sticky.cookie.name: cookie
+
+spec:
+  sessionAffinity: ClientIP
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8000
+  selector:
+    app: eventmanagement
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: account
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+    type: RollingUpdate
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: account
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: account
+        image: uatvemscr.azurecr.io/account:latest
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+          limits:
+            cpu: 500m
+            memory: 1024Mi
+        securityContext:
+          runAsNonRoot: true       
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+        ports:
+        - containerPort: 8000
+        readinessProbe:  
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+       
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: account-uat
+  name: account-uat
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    # protocol: TCP
+    targetPort: 8000
+  selector:
+    app: account
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adminui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adminui
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+    type: RollingUpdate
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: adminui
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: adminui
+        image: uatvemscr.azurecr.io/adminui:latest
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+          limits:
+            cpu: 500m
+            memory: 1024Mi
+        securityContext:
+          runAsNonRoot: true       
+          runAsUser: 1000
+          runAsGroup: 1000
+          allowPrivilegeEscalation: false
+        ports:
+        - containerPort: 8000
+        readinessProbe:  
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+       
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: adminui-uat
+  name: adminui-uat
+spec:
+  type: ClusterIP  
+  selector:
+    app: adminui
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8000

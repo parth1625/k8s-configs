@@ -1,0 +1,69 @@
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: usermanagement-hpa
+spec:
+  maxReplicas: 15 # define max replica count
+  minReplicas: 1  # define min replica count
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: usermanagement
+  targetCPUUtilizationPercentage: 75
+
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: frontendmanagement-hpa
+spec:
+  maxReplicas: 15 # define max replica count
+  minReplicas: 3  # define min replica count
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: frontendmanagement
+  targetCPUUtilizationPercentage: 75
+
+# ---
+# apiVersion: autoscaling/v1
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: eventmanagement-hpa
+# spec:
+#   maxReplicas: 15 # define max replica count
+#   minReplicas: 1  # define min replica count
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: eventmanagement
+#   targetCPUUtilizationPercentage: 75
+
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: account-hpa
+spec:
+  maxReplicas: 15 # define max replica count
+  minReplicas: 1  # define min replica count
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: account
+  targetCPUUtilizationPercentage: 75
+
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: adminui-hpa
+spec:
+  maxReplicas: 15 # define max replica count
+  minReplicas: 1  # define min replica count
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: adminui
+  targetCPUUtilizationPercentage: 75

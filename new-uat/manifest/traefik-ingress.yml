@@ -1,0 +1,69 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-traefik
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    # traefik.ingress.kubernetes.io/rewrite-target: /
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    # traefik.ingress.kubernetes.io/rule-type: "PathPrefixStrip"
+    ingress.kubernetes.io/ssl-redirect: "true"
+    ingress.kubernetes.io/whitelist-x-forwarded-for: "true"
+
+spec:
+  tls:
+    - secretName: myvirtrio-newssl-cert
+
+  rules:
+  - host: uataccount.myvirtrio.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: account-uat
+            port:
+              number: 80
+      
+  - host: uatevent.myvirtrio.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: eventmanagement-uat
+            port:
+              number: 80
+
+  # - host: uatevent.myvirtrio.com
+  #   http:
+  #     paths:
+  #     - path: "/api/BroadcastMessage/UpsertBroadcastMessage"
+  #       pathType: Exact
+  #       backend:
+  #         service:
+  #           name: wsevent-uat
+  #           port:
+  #             number: 80
+  - host: uatfrontend.myvirtrio.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontendmanagement-uat
+            port:
+              number: 80
+  - host: uatuser.myvirtrio.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: usermanagement-uat
+            port:
+              number: 80

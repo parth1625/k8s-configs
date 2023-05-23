@@ -1,0 +1,14 @@
+Application (Client) ID - 19ffcbaa-61d3-4ebe-95b2-01fd2cc6cfb7
+Directory (tenant) ID    - 4df50f95-62ac-430e-996a-5c347fb7f070
+Object ID        - 3fb3c98f-bedb-40fa-9384-90915be9b4d8
+Value            - AIq8Q~oyrI33gN2Y_CeAx7D8ihktgKj_pYYB8cmK
+Secret ID        - 5432cc64-13d8-4e7b-b878-e4b6f7fda978
+Resource Group   - Virtualplatform_UAT
+Subscription ID  - 6da878b0-1a4a-4363-959e-845b3cc84b90
+
+
+Docker Server Name: uatvemscr.azurecr.io
+Docker Username: uatvemscr
+DOcker Password: hg8cBqj5=JdH1Mhv4oe9kTVi6OxUDios
+
+uat.myvirtrio.com (Old IP): 20.232.70.36

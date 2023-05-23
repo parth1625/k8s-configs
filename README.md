@@ -114,7 +114,7 @@
     kubectl --namespace ingress-nginx get services
 
 ## Configure cert manager for Nginx Ingress:
-    kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.1/cert-manager.yaml             (Kubernetes version 1.16+)
+    kubectl apply --validate=false -f https://github.com/cert-manager/cert-manager/releases/download/v1.7.1/cert-manager.crds.yaml             (Kubernetes version 1.16+)
 
     kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.1/cert-manager-legacy.yaml      (Kubernetes <1.16 version)
 

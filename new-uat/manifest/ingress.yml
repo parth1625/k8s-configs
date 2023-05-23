@@ -1,0 +1,39 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-ag
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+    appgw.ingress.kubernetes.io/ssl-redirect: "true"
+    # traefik.ingress.kubernetes.io/rewrite-target: /
+    # traefik.ingress.kubernetes.io/router.tls: "true"
+    ingress.kubernetes.io/ssl-redirect: "false"
+
+spec:
+  tls:
+    - secretName: myvirtrio-newssl-cert
+
+  rules:
+  # - host: uat.myvirtrio.com
+  - host: myvirtrio.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: adminui-uat
+            port:
+              number: 80
+
+  # - host: uat.myvirtrio.com
+  #   http:
+  #     paths:
+  #     - path: /
+  #       pathType: Prefix
+  #       backend:
+  #         service:
+  #           name: adminui-uat
+  #           port:
+  #             number: 80

@@ -1,0 +1,4 @@
+Registry Name: uatvemscr
+Login Server: uatvemscr.azurecr.io
+Username: uatvemscr
+Password: hg8cBqj5=JdH1Mhv4oe9kTVi6OxUDios
